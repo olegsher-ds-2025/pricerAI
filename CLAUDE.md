@@ -4,13 +4,13 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Status
 
-All planned phases are built and verified locally. Not yet done: the GitHub repo (creation failed with a GitHub 500, user will do it manually), Pages enablement, and installing the container on the Pi. The approved design and phased plan live in `~/.claude/plans/analyze-project-requrements-from-lazy-papert.md`.
+All planned phases are built and verified locally. Repo `olegsher-ds-2025/pricerAI` is live; Pages serves `master` / root at https://pricerai.sher.biz (HTTPS enforced). Not yet done: installing the collector container on the Pi. The approved design and phased plan live in `~/.claude/plans/analyze-project-requrements-from-lazy-papert.md`.
 
 ## Commands
 
 - Run the collector: `python3 -m collector.run [--dry-run]` (stdlib only; exits 1 if any fetch failed or was rejected)
 - JS tests: `node --test tests/`
-- Serve the site: `python3 -m http.server` (repo root; `index.html` is at the root because Pages publishes from `main` / root)
+- Serve the site: `python3 -m http.server` (repo root; `index.html` is at the root because Pages publishes from `master` / root)
 - Python tests: `uv run --with pytest --with jsonschema python -m pytest -q tests` (single test: append `tests/test_collector.py::test_name`)
 - Validate the snapshot: `uv run --with jsonschema python -c "import json,jsonschema; jsonschema.validate(json.load(open('data/current.json')), json.load(open('data/schema.json')))"`
 

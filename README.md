@@ -6,8 +6,8 @@ The site is static. A collector container on the Raspberry Pi pulls prices daily
 
 ## Publish
 
-1. Push this repo to GitHub (public, for free Pages).
-2. Settings → Pages → Deploy from branch → `main` / root.
+1. The repo is `olegsher-ds-2025/pricerAI` (public, required for free Pages).
+2. Settings → Pages → Deploy from branch → `master` / root. The `CNAME` file sets the custom domain (pricerai.sher.biz).
 
 ## Collector on the Pi
 
