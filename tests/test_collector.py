@@ -31,8 +31,8 @@ def test_parse_maps_variants():
     }
 
 
-def test_parse_skips_non_chat():
-    assert parse({"e": {"litellm_provider": "openai", "mode": "embedding", "input_cost_per_token": 1e-7}})["OpenAI"] == []
+def test_parse_skips_unsupported_modes():
+    assert parse({"e": {"litellm_provider": "openai", "mode": "moderation", "input_cost_per_token": 1e-7}})["OpenAI"] == []
 
 
 def test_rows_match_schema():
@@ -75,3 +75,22 @@ def test_history_only_records_changes():
     entries = history_entries(new, old, "t")
     assert len(entries) == 1 and row_key(entries[0]) == row_key(new[0])
     assert len(history_entries(new, new, "t")) == 0
+
+
+def test_special_services_and_responses_mode():
+    data = {
+        "emb": {"litellm_provider": "openai", "mode": "embedding", "input_cost_per_token": 2e-07},
+        "img": {"litellm_provider": "openai", "mode": "image_generation", "output_cost_per_image": 0.04},
+        "stt": {"litellm_provider": "openai", "mode": "audio_transcription", "input_cost_per_second": 0.0001},
+        "vid": {"litellm_provider": "openai", "mode": "video_generation", "output_cost_per_second": 0.1,
+                "output_cost_per_video_per_second": 0.1},
+        "codex": {"litellm_provider": "openai", "mode": "responses", "input_cost_per_token": 1e-06},
+    }
+    got = {(r["model"], r["service_type"], r["unit"], r["direction"]): r["price_usd"] for r in parse(data)["OpenAI"]}
+    assert got == {
+        ("emb", "embedding", "1M_tokens", "input"): 0.2,
+        ("img", "image", "image", "output"): 0.04,
+        ("stt", "audio", "minute", "input"): 0.006,
+        ("vid", "video", "second", "output"): 0.1,
+        ("codex", "llm", "1M_tokens", "input"): 1.0,
+    }

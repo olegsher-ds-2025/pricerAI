@@ -17,7 +17,7 @@
         "provider": {"type": "string"},
         "model": {"type": "string"},
         "service_type": {"enum": ["llm", "image", "audio", "video", "embedding", "other"]},
-        "unit": {"enum": ["1M_tokens", "image", "minute", "second", "query"]},
+        "unit": {"enum": ["1M_tokens", "1M_characters", "image", "minute", "second", "page"]},
         "direction": {"enum": ["input", "output", "cache_read", "cache_write", "cache_write_1h"]},
         "tier": {"enum": ["standard", "batch", "priority", "flex"], "default": "standard"},
         "context_over": {"type": ["integer", "null"], "description": "Applies when prompt exceeds this many tokens; null = base price"},

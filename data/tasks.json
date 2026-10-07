@@ -1,0 +1,21 @@
+{
+  "version": 1,
+  "tasks": [
+    {"id": "write-book", "name": "Write a book", "description": "Draft a ~100k-word book from a 10k-token outline.",
+     "service_type": "llm", "usage": [{"unit": "1M_tokens", "direction": "input", "amount": 10000}, {"unit": "1M_tokens", "direction": "output", "amount": 130000}]},
+    {"id": "summarize-article", "name": "Summarize an article", "description": "5k tokens in, 500-token summary out.",
+     "service_type": "llm", "usage": [{"unit": "1M_tokens", "direction": "input", "amount": 5000}, {"unit": "1M_tokens", "direction": "output", "amount": 500}]},
+    {"id": "review-pr", "name": "Review a pull request", "description": "30k tokens of diff and context in, 3k tokens of review out.",
+     "service_type": "llm", "usage": [{"unit": "1M_tokens", "direction": "input", "amount": 30000}, {"unit": "1M_tokens", "direction": "output", "amount": 3000}]},
+    {"id": "generate-image", "name": "Generate an image", "description": "One image at the model's default size and quality.",
+     "service_type": "image", "usage": [{"unit": "image", "direction": "output", "amount": 1}]},
+    {"id": "transcribe-hour", "name": "Transcribe 1 hour of audio", "description": "60 minutes of speech to text.",
+     "service_type": "audio", "usage": [{"unit": "minute", "direction": "input", "amount": 60}]},
+    {"id": "video-clip", "name": "Generate a 10 s video", "description": "Ten seconds of generated video at the base resolution.",
+     "service_type": "video", "usage": [{"unit": "second", "direction": "output", "amount": 10}]},
+    {"id": "embed-corpus", "name": "Embed a 100M-token corpus", "description": "Index roughly 75k pages of text for retrieval.",
+     "service_type": "embedding", "usage": [{"unit": "1M_tokens", "direction": "input", "amount": 100000000}]},
+    {"id": "ocr-pages", "name": "OCR 100 pages", "description": "Extract text from 100 scanned pages.",
+     "service_type": "other", "usage": [{"unit": "page", "direction": "input", "amount": 100}]}
+  ]
+}

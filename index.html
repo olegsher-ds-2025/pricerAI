@@ -1,0 +1,77 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>PricerAI</title>
+<meta name="description" content="Compare AI API prices across providers: per-token, special services, history and cost per task.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 16 16%22%3E%3Ctext y=%2213%22 font-size=%2214%22%3E%24%3C/text%3E%3C/svg%3E">
+<link rel="stylesheet" href="site/style.css">
+</head>
+<body>
+<header>
+  <h1>PricerAI</h1>
+  <p class="sub">AI service prices, collected daily. <span id="updated"></span></p>
+  <div id="stale" class="banner" hidden></div>
+  <nav id="tabs" role="tablist">
+    <button role="tab" data-tab="prices" aria-selected="true">Token prices</button>
+    <button role="tab" data-tab="history" aria-selected="false">History</button>
+    <button role="tab" data-tab="services" aria-selected="false">Special services</button>
+    <button role="tab" data-tab="tasks" aria-selected="false">Cost per task</button>
+  </nav>
+</header>
+<main>
+  <section id="prices" class="panel">
+    <div class="controls">
+      <input id="q" type="search" placeholder="Filter models…" aria-label="Filter models">
+      <select id="provider" aria-label="Provider"></select>
+      <select id="tier" aria-label="Pricing tier">
+        <option value="standard">Standard</option><option value="batch">Batch</option>
+        <option value="priority">Priority</option><option value="flex">Flex</option>
+      </select>
+      <select id="context" aria-label="Context band">
+        <option value="base">Base prompt</option><option value="long">Long-context only</option><option value="all">All bands</option>
+      </select>
+      <label><input id="dated" type="checkbox" checked> Hide dated snapshots</label>
+      <span class="unit" role="group" aria-label="Price unit">
+        <button data-unit="1M" aria-pressed="true">per 1M</button><button data-unit="1B" aria-pressed="false">per 1B</button>
+      </span>
+    </div>
+    <p id="prices-count" class="count"></p>
+    <div class="scroll"><table id="prices-table"></table></div>
+  </section>
+
+  <section id="history" class="panel" hidden>
+    <div class="controls">
+      <select id="h-provider" aria-label="Provider"></select>
+      <select id="h-model" aria-label="Model"></select>
+    </div>
+    <p id="h-note" class="count"></p>
+    <div class="chart"><canvas id="h-chart"></canvas></div>
+  </section>
+
+  <section id="services" class="panel" hidden>
+    <div class="controls">
+      <select id="s-type" aria-label="Service type"></select>
+      <input id="s-q" type="search" placeholder="Filter models…" aria-label="Filter models">
+    </div>
+    <p id="services-count" class="count"></p>
+    <div class="scroll"><table id="services-table"></table></div>
+  </section>
+
+  <section id="tasks" class="panel" hidden>
+    <div class="controls">
+      <select id="t-task" aria-label="Task"></select>
+      <select id="t-limit" aria-label="Rows shown">
+        <option value="10">Cheapest 10</option><option value="25">Cheapest 25</option><option value="0">All</option>
+      </select>
+    </div>
+    <p id="t-desc" class="count"></p>
+    <div class="scroll"><table id="tasks-table"></table></div>
+  </section>
+</main>
+<footer>Prices come from <a href="https://github.com/BerriAI/litellm">LiteLLM's price list</a> and may lag provider pages. Task costs are estimates from the stated assumptions.</footer>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<script type="module" src="site/app.mjs"></script>
+</body>
+</html>
