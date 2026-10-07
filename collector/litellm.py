@@ -1,9 +1,6 @@
 import json
 import re
-import sys
 import urllib.request
-from datetime import datetime, timezone
-from pathlib import Path
 
 LITELLM_URL = "https://raw.githubusercontent.com/BerriAI/litellm/main/model_prices_and_context_window.json"
 PROVIDERS = {"openai": "OpenAI", "anthropic": "Anthropic", "gemini": "Google", "mistral": "Mistral"}
@@ -45,19 +42,15 @@ def rows_for(key: str, entry: dict, provider: str) -> list[dict]:
     return out
 
 
-def build(data: dict) -> dict:
-    rows = []
+def parse(data: dict) -> dict[str, list[dict]]:
+    by_provider: dict[str, list[dict]] = {name: [] for name in PROVIDERS.values()}
     for key, entry in data.items():
         provider = PROVIDERS.get(entry.get("litellm_provider"))
         if provider and entry.get("mode") == "chat":
-            rows += rows_for(key, entry, provider)
-    rows.sort(key=lambda r: (r["provider"], r["model"], r["direction"], r["tier"], r["context_over"] or 0))
-    return {"generated_at": datetime.now(timezone.utc).isoformat(timespec="seconds"), "rows": rows}
+            by_provider[provider] += rows_for(key, entry, provider)
+    return by_provider
 
 
-if __name__ == "__main__":
-    src = sys.argv[1] if len(sys.argv) > 1 else None
-    raw = open(src).read() if src else urllib.request.urlopen(LITELLM_URL, timeout=60).read()
-    snapshot = build(json.loads(raw))
-    Path("data/current.json").write_text(json.dumps(snapshot, indent=1) + "\n")
-    print(f"{len(snapshot['rows'])} rows")
+def fetch() -> dict[str, list[dict]]:
+    raw = urllib.request.urlopen(LITELLM_URL, timeout=60).read()
+    return parse(json.loads(raw))
