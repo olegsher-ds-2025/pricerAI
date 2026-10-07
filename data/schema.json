@@ -1,0 +1,30 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "PricerAI snapshot",
+  "type": "object",
+  "required": ["generated_at", "rows"],
+  "additionalProperties": false,
+  "properties": {
+    "generated_at": {"type": "string", "format": "date-time"},
+    "rows": {"type": "array", "items": {"$ref": "#/$defs/row"}}
+  },
+  "$defs": {
+    "row": {
+      "type": "object",
+      "required": ["provider", "model", "service_type", "unit", "direction", "price_usd", "source", "url"],
+      "additionalProperties": false,
+      "properties": {
+        "provider": {"type": "string"},
+        "model": {"type": "string"},
+        "service_type": {"enum": ["llm", "image", "audio", "video", "embedding", "other"]},
+        "unit": {"enum": ["1M_tokens", "image", "minute", "second", "query"]},
+        "direction": {"enum": ["input", "output", "cache_read", "cache_write", "cache_write_1h"]},
+        "tier": {"enum": ["standard", "batch", "priority", "flex"], "default": "standard"},
+        "context_over": {"type": ["integer", "null"], "description": "Applies when prompt exceeds this many tokens; null = base price"},
+        "price_usd": {"type": "number", "exclusiveMinimum": 0},
+        "source": {"enum": ["api", "scrape", "manual"]},
+        "url": {"type": "string"}
+      }
+    }
+  }
+}
